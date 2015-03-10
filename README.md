@@ -10,4 +10,4 @@ The visualiser's center circle represents the user and the other circles represe
 
 Only those tweets are read whose geocoding information is available and falls within the 5 km bounding box.
 
-![Twitter Visualizer](CAPTURE.PNG?raw=true "Screenshot")
+![Twitter Visualizer](https://github.com/zafar142007/TwitterVisualizer/blob/master/TwitterVisualizer/src/Capture.PNG?raw=true "Screenshot")
