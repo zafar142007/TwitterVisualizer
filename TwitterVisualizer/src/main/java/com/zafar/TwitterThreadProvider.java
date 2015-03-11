@@ -115,7 +115,8 @@ public class TwitterThreadProvider extends Thread {
             String line;
             while ((line = reader.readLine()) != null) {
             	synchronized(tweets){
-            		tweets.add(line);
+            		if(line!="")
+            			tweets.add(line);
             	}
             	log.info(line);
             }
