@@ -99,6 +99,26 @@
 				}
 			});
 		}
+		function toRadians(number){
+			return number*Math.PI/180.0;
+		}
+		
+		function distance(lat1, lon1, lat2, lon2){
+			var R = 6371000; // metres
+			var p1 = toRadians(lat1);
+			var p2 = toRadians(lat2);
+			var p = toRadians(lat2-lat1);
+			var l = toRadians(lon2-lon1);
+
+			var a = Math.sin(p/2) * Math.sin(p/2) +
+					Math.cos(p1) * Math.cos(p2) *
+					Math.sin(l/2) * Math.sin(l/2);
+			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+			var d = R * c;
+			return d*0.000621371; //in miles
+		}
+
 		function draw(tweets) {
 			var canvas = document.getElementById('myCanvas');
 			for (i = 0; i < tweets.length; i++) {
