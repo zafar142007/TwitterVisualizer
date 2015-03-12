@@ -4,7 +4,9 @@
 <body>
 	<h2>Twitter Visualizer</h2>
 
-	<input value="Start visualization" type="submit" onclick="getLatLong()">
+	<input id="startButton" value="Start visualization" type="submit" onclick="getLatLong()">
+	<input id="stopButton" value="Stop visualization" type="submit" onclick="stopVisualization()" disabled='disabled'>
+	
 	<div id="status"></div>
 	<div id="myCanvas" style="width:500px;height:500">
 	</div>
@@ -19,7 +21,7 @@
 		var list = [];
 		var lati = 0, longi = 0;
 		var map;
-
+		var interval;
 		function getLatLong() {
 
 			if (navigator.geolocation) {
@@ -44,20 +46,60 @@
 			});
 
 		}
+		function stopVisualization(){
+			var toSend = "lat=" + lati + "&longi=" + longi;
+			if($("#startButton").attr('disabled')=='disabled')
+			{	
+				$.ajax({
+	
+					url : "end",
+					data : toSend,
+					type : "GET",
+					success : function(data) {
+						$("#status")
+								.text(
+										$("#status").text()
+												+ ". Ended!");
+						var attr = $("#startButton").attr('disabled');
 
+						if (typeof attr !== typeof undefined && attr !== false) {
+							$("#startButton").removeAttr('disabled');
+						}
+						$("#stopButton").attr('disabled','disabled');
+						
+						clearInterval(interval);
+						$("#status").text('');
+				
+					},
+					error : function(a, b, c) {
+	
+					}
+				});
+			}
+		}
 		function showPosition(position) {
 			lati = position.coords.latitude;
 			longi = position.coords.longitude;
+			$("#status").text('');
+			$('#log').text('Log:');
 			$("#status").text(
 					"Sending your Latitude: " + lati + " and Longitude: "
 							+ longi);
-			$("input").attr('disabled', 'disabled');
+			$("#startButton").attr('disabled', 'disabled');
 			initialize();
+			index = 0;
+			list = [];
 			startPolling(lati, longi);
-		}
-		function startPolling(lati, longit) {
+			var attr = $("#stopButton").attr('disabled');
 
-			var toSend = "lat=" + lati + "&longi=" + longit;
+			if (typeof attr !== typeof undefined && attr !== false) {
+				$("#stopButton").removeAttr('disabled');
+			}
+			
+		}
+		function startPolling(latit, longit) {
+
+			var toSend = "lat=" + latit + "&longi=" + longit;
 			$.ajax({
 
 						url : "start",
@@ -75,7 +117,7 @@
 					});
 			//poll every 1 second
 			//	var interval = setTimeout(poll, 1000);
-			var interval = setInterval(poll, 1000);
+			interval = setInterval(poll, 1000);
 
 		}
 
@@ -85,7 +127,7 @@
 				type : "GET",
 				url : "tweet",
 				datatype : "json",
-				data : "index=" + index,
+				data : "index=" + index+ "&lat=" + lati+ "&longi=" +longi,
 				success : function(data) {
 					if (data.length != 0 && data!="")
 						if(data[0]!="")

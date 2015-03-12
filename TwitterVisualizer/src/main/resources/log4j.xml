@@ -11,11 +11,11 @@
 	</appender>
 
 	<logger name="twitterinf" additivity="false">
-		<level value="ALL" />
+		<level value="DEBUG" />
 		<appender-ref ref="twitter-log" />
 	</logger>
 	
 	<root> 
-		<level value="ALL" /> <appender-ref ref="twitter-log" /> 
+		<level value="DEBUG" /> <appender-ref ref="twitter-log" /> 
 	</root>
 </log4j:configuration>

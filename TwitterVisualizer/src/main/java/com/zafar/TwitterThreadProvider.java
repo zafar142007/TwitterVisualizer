@@ -15,39 +15,42 @@ import org.scribe.oauth.OAuthService;
 
 public class TwitterThreadProvider extends Thread {
 	private Logger log=Logger.getLogger(TwitterThreadProvider.class);
+	volatile boolean finished = false;
 	private String consumerKey="", consumerSecret="", accessTokenString="", accessTokenSecret="";
-	public String getConsumerKey() {
-		return consumerKey;
-	}
-	public void setConsumerKey(String consumerKey) {
-		this.consumerKey = consumerKey;
-	}
-	public String getConsumerSecret() {
-		return consumerSecret;
-	}
-	public void setConsumerSecret(String consumerSecret) {
-		this.consumerSecret = consumerSecret;
-	}
-	public String getAccessTokenString() {
-		return accessTokenString;
-	}
-	public void setAccessTokenString(String accessTokenString) {
-		this.accessTokenString = accessTokenString;
-	}
-	public String getAccessTokenSecret() {
-		return accessTokenSecret;
-	}
-	public void setAccessTokenSecret(String accessTokenSecret) {
-		this.accessTokenSecret = accessTokenSecret;
-	}
 	private String longitude, latitude;
-	private final double RADIUS=1.0;//search within 1 mile
+	private double RADIUS=1.0;//search within 1 mile
 	private final double EARTH_RADIUS=3959.0;//earth radius in miles
+	private int MAX_NUMBER_OF_TWEETS=100;
     private static final String STREAM_URI = "https://stream.twitter.com/1.1/statuses/filter.json";
     public ArrayList<String> tweets;
-    
+    public void setHeaders(OAuthHeaders h)
+    {
+    	setConsumerKey(h.getConsumerKey());
+    	setConsumerSecret(h.getConsumerSecret());
+    	setAccessTokenSecret(h.getAccessTokenSecret());
+    	setAccessTokenString(h.getAccessTokenString());
+    }
+	private void setConsumerKey(String consumerKey) {
+		this.consumerKey = consumerKey;
+	}
+	private void setConsumerSecret(String consumerSecret) {
+		this.consumerSecret = consumerSecret;
+	}
+	private void setAccessTokenString(String accessTokenString) {
+		this.accessTokenString = accessTokenString;
+	}
+	private void setAccessTokenSecret(String accessTokenSecret) {
+		this.accessTokenSecret = accessTokenSecret;
+	}
+    public void setTweets(ArrayList<String> t){
+    	 tweets=t;
+    }
+    public void setRadius(double d){
+    	RADIUS=d;
+    }
     public TwitterThreadProvider() {
 	}
+    
     public TwitterThreadProvider(String lat, String longi, ArrayList<String> tweets){
     	latitude=lat;
     	longitude=longi;
@@ -113,16 +116,62 @@ public class TwitterThreadProvider extends Thread {
             BufferedReader reader = new BufferedReader(new InputStreamReader(response.getStream()));
 
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null && finished==false) {
             	synchronized(tweets){
             		if(line!="")
+            		{	
             			tweets.add(line);
+            			if(tweets.size()==MAX_NUMBER_OF_TWEETS)
+            			{
+            				tweets.remove(0);//flush out from the front of the queue
+            			}
+            		}
             	}
             	log.info(line);
             }
+            reader.close();
+            log.debug("Closing this thread: latitude "+latitude+"  longitude "+longitude);
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+	public void stopMe()
+	{
+	    finished = true;
+	}
+	public boolean isFinished(){
+		return isAlive();
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((latitude == null) ? 0 : latitude.hashCode());
+		result = prime * result
+				+ ((longitude == null) ? 0 : longitude.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TwitterThreadProvider other = (TwitterThreadProvider) obj;
+		if (latitude == null) {
+			if (other.latitude != null)
+				return false;
+		} else if (!latitude.equals(other.latitude))
+			return false;
+		if (longitude == null) {
+			if (other.longitude != null)
+				return false;
+		} else if (!longitude.equals(other.longitude))
+			return false;
+		return true;
 	}
 }
