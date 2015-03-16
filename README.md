@@ -7,6 +7,6 @@ Enter the Oauth keys of Twitter (get them from https://dev.twitter.com/oauth/app
 http://localhost:port/twitterVisualizer/home
 Click on 'Start Visualizer' button to see.
 
-Only those tweets are read whose geocoding information is available and falls within the 15 km bounding box.
+Only those tweets are read whose geocoding information is available and fall within a 15 km bounding box of the user's location.
 
 ![Twitter Visualizer](https://github.com/zafar142007/TwitterVisualizer/blob/master/TwitterVisualizer/src/Capture.PNG?raw=true "Screenshot")
