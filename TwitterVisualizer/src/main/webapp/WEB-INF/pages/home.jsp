@@ -1,18 +1,27 @@
-<html>
+<!DOCTYPE HTML>
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
-	<h2>Twitter Visualizer</h2>
-
-	<input id="startButton" value="Start visualization" type="submit" onclick="getLatLong()">
-	<input id="stopButton" value="Stop visualization" type="submit" onclick="stopVisualization()" disabled='disabled'>
-	
-	<div id="status"></div>
-	<div id="myCanvas" style="width:500px;height:500">
+	<h2 class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+		style="text-align: center">Twitter Visualizer</h2>
+	<div style="text-align: center">
+		<input id="startButton" value="Start visualization" type="submit"
+			onclick="getLatLong()"> <input id="stopButton"
+			value="Stop visualization" type="submit"
+			onclick="stopVisualization()" disabled='disabled'>
 	</div>
+	<div id="status" style="text-align: center"></div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+		style="text-align: center" id="myCanvas"
+		style="width:500px;height:500"></div>
 
-	<div id="log">Log:</div>
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="log"
+		style="text-align: center; word-wrap: break-word;">Log:</div>
 	<script src="https://maps.googleapis.com/maps/api/js"></script>
+	<link rel="stylesheet" type="text/css"
+		href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
 
 	<script type="text/javascript"
 		src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
@@ -46,35 +55,34 @@
 			});
 
 		}
-		function stopVisualization(){
+		function stopVisualization() {
 			var toSend = "lat=" + lati + "&longi=" + longi;
-			if($("#startButton").attr('disabled')=='disabled')
-			{	
-				$.ajax({
-	
-					url : "end",
-					data : toSend,
-					type : "GET",
-					success : function(data) {
-						$("#status")
-								.text(
-										$("#status").text()
-												+ ". Ended!");
-						var attr = $("#startButton").attr('disabled');
+			if ($("#startButton").attr('disabled') == 'disabled') {
+				$
+						.ajax({
 
-						if (typeof attr !== typeof undefined && attr !== false) {
-							$("#startButton").removeAttr('disabled');
-						}
-						$("#stopButton").attr('disabled','disabled');
-						
-						clearInterval(interval);
-						$("#status").text('');
-				
-					},
-					error : function(a, b, c) {
-	
-					}
-				});
+							url : "end",
+							data : toSend,
+							type : "GET",
+							success : function(data) {
+								$("#status").text(
+										$("#status").text() + ". Ended!");
+								var attr = $("#startButton").attr('disabled');
+
+								if (typeof attr !== typeof undefined
+										&& attr !== false) {
+									$("#startButton").removeAttr('disabled');
+								}
+								$("#stopButton").attr('disabled', 'disabled');
+
+								clearInterval(interval);
+								$("#status").text('');
+
+							},
+							error : function(a, b, c) {
+
+							}
+						});
 			}
 		}
 		function showPosition(position) {
@@ -95,12 +103,13 @@
 			if (typeof attr !== typeof undefined && attr !== false) {
 				$("#stopButton").removeAttr('disabled');
 			}
-			
+
 		}
 		function startPolling(latit, longit) {
 
 			var toSend = "lat=" + latit + "&longi=" + longit;
-			$.ajax({
+			$
+					.ajax({
 
 						url : "start",
 						data : toSend,
@@ -127,13 +136,13 @@
 				type : "GET",
 				url : "tweet",
 				datatype : "json",
-				data : "index=" + index+ "&lat=" + lati+ "&longi=" +longi,
+				data : "index=" + index + "&lat=" + lati + "&longi=" + longi,
 				success : function(data) {
-					if (data.length != 0 && data!="")
-						if(data[0]!="")
+					if (data.length != 0 && data != "")
+						if (data[0] != "")
 							$("#log").text(
-								$("#log").text() + data.length
-										+ " more tweets read. ");
+									$("#log").text() + data.length
+											+ " more tweets read. ");
 					if (data != "") {
 						index = index + data.length;
 						draw(data);
@@ -141,24 +150,23 @@
 				}
 			});
 		}
-		function toRadians(number){
-			return number*Math.PI/180.0;
+		function toRadians(number) {
+			return number * Math.PI / 180.0;
 		}
-		
-		function distance(lat1, lon1, lat2, lon2){
+
+		function distance(lat1, lon1, lat2, lon2) {
 			var R = 6371000; // metres
 			var p1 = toRadians(lat1);
 			var p2 = toRadians(lat2);
-			var p = toRadians(lat2-lat1);
-			var l = toRadians(lon2-lon1);
+			var p = toRadians(lat2 - lat1);
+			var l = toRadians(lon2 - lon1);
 
-			var a = Math.sin(p/2) * Math.sin(p/2) +
-					Math.cos(p1) * Math.cos(p2) *
-					Math.sin(l/2) * Math.sin(l/2);
-			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+			var a = Math.sin(p / 2) * Math.sin(p / 2) + Math.cos(p1)
+					* Math.cos(p2) * Math.sin(l / 2) * Math.sin(l / 2);
+			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
 			var d = R * c;
-			return d*0.000621371; //in miles
+			return d * 0.000621371; //in miles
 		}
 
 		function draw(tweets) {
@@ -180,7 +188,7 @@
 				}
 				$("#log").text($("#log").text() + " Drawing this.");
 				var location = new google.maps.LatLng(latitude, longitude);
-		 		
+
 				var marker = new google.maps.Marker({
 					position : location,
 					map : map,
