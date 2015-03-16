@@ -13,11 +13,11 @@
 			onclick="stopVisualization()" disabled='disabled'>
 	</div>
 	<div id="status" style="text-align: center"></div>
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
-		style="text-align: center" id="myCanvas"
-		style="width:500px;height:500"></div>
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 "
+		style="text-align: center;height:500px;margin-left:auto;margin-right:auto;float:none" id="myCanvas"
+		></div>
 
-	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="log"
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" 	id="log"
 		style="text-align: center; word-wrap: break-word;">Log:</div>
 	<script src="https://maps.googleapis.com/maps/api/js"></script>
 	<link rel="stylesheet" type="text/css"
