@@ -19,14 +19,14 @@
 
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" 	id="log"
 		style="text-align: center; word-wrap: break-word;">Log:</div>
-	<div>Created by Zafar Ansari</div>
-	<div><a href="https://github.com/zafar142007/TwitterVisualizer">GitHub repo</a></div>
+	<div style="text-align: center">Created by Zafar Ansari</div>
+	<div style="text-align: center"><a href="https://github.com/zafar142007/TwitterVisualizer">GitHub repo</a></div>
 	<script src="https://maps.googleapis.com/maps/api/js"></script>
 	<link rel="stylesheet" type="text/css"
-		href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
 
 	<script type="text/javascript"
-		src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+		src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 	<script type="text/javascript">
 		var index = 0;
 		var list = [];
